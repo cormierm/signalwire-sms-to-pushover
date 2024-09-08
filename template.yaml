@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  signalwireSmsToPushover
+
+  Sample SAM Template for Signalwire Sms To Pushover
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 15
+Parameters:
+  PushoverApiToken:
+    Type: String
+    Description: Pushover Api Token
+    Default: your-pushover-api-token
+  PushoverUserToken:
+    Type: String
+    Description: Pushover User Token
+    Default: your-pushover-user-token
+
+Resources:
+  SignalwireSmsToPushoverFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: signalwire/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        SignalwireSmsToPushover:
+          Type: Api
+          Properties:
+            Path: /signalwire
+            Method: post
+      Environment:
+        Variables:
+          PUSHOVER_API_TOKEN: !Ref PushoverApiToken
+          PUSHOVER_USER_TOKEN: !Ref PushoverUserToken
+
+Outputs:
+  SignalwireSmsToPushoverApi:
+    Description: "API Gateway endpoint URL for Prod stage for SignalwireSmsToPushover function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/signalwire/"
+  SignalwireSmsToPushoverFunction:
+    Description: "SignalwireSmsToPushover Lambda Function ARN"
+    Value: !GetAtt SignalwireSmsToPushoverFunction.Arn
+  SignalwireSmsToPushoverFunctionIamRole:
+    Description: "Implicit IAM Role created for SignalwireSmsToPushover function"
+    Value: !GetAtt SignalwireSmsToPushoverFunctionRole.Arn

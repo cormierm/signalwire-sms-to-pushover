@@ -1,0 +1,9 @@
+{
+  "name": "signalwire_sms_to_pushover",
+  "version": "1.0.0",
+  "description": "AWS Lambda to send pushover notification when signalwire receives sms for NodeJS",
+  "main": "app.js",
+  "repository": "https://github.com/cormierm/signalwire-sms-to-pushover",
+  "author": "SAM CLI",
+  "license": "MIT"
+}
