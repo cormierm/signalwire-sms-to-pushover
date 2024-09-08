@@ -7,8 +7,8 @@ export const lambdaHandler = async (event, context) => {
 
         const body = querystring.parse(event.body);
 
-        const fromNumber = body.From;
-        const toNumber = body.To;
+        const fromNumber = formatPhoneNumber(body.From);
+        const toNumber = formatPhoneNumber(body.To);
 
         const postData = querystring.stringify({
             token: process.env.PUSHOVER_API_TOKEN,
@@ -52,3 +52,13 @@ export const lambdaHandler = async (event, context) => {
         };
     }
 };
+
+function formatPhoneNumber(phoneNumber) {
+    if (phoneNumber.startsWith('+1')) {
+        const cleaned = phoneNumber.replace(/^\+1/, '').replace(/\D/g, '');
+
+        return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    }
+
+    return phoneNumber;
+}
